@@ -1,51 +1,60 @@
-const PROJECTS = {
-	dotsAndCircles: {
+type Project = {
+	name: string;
+	link: string;
+	description: string;
+}
+const PROJECTS = [
+	{
 		name: "Dots and Circles",
 		link: "http://dots-and-circles.sasha-m-ebersole.com/",
 		description: "Dots and Circles is my first non-tutorial machine learning project. It is an app for optical character recognition of Manchu-language text."
 	},
-	raschka: {
+	{
 		name: "Raschka LLM",
 		link: "http://raschka.sasha-m-ebersole.com/",
 		description: "A GPT-style LLM created by working through Sebastian Raschka's book 'How to Build a Large Language Model (From Scratch)'",
 	},
-};
+];
 
 function Projects() {
 	return (
 		<ul>
-			{Object.keys(PROJECTS).map((key) => (
-				<li key={key}>
-					<a href={PROJECTS[key].link}>{PROJECTS[key].name}</a>
-					{': '}{PROJECTS[key].description}
+			{PROJECTS.map((project) => (
+				<li key={project.name}>
+					<a href={project.link}>{project.name}</a>
+					{': '}{project.description}
 				</li>
 			))}
 		</ul>
 	)
 }
 
-const CONTACT = {
-	email: {
+type ContactMethod = {
+	link: string;
+	name: string;
+};
+const CONTACT = [
+	{
 		link: 'mailto:sasha.m.ebersole@gmail.com',
 		name: 'sasha.m.ebersole@gmail.com',
 	},
-	github: {
+	{
 		link: 'https://github.com/AVespaIsNotAMotorcycle',
 		name: 'GitHub'
 	},
-	linkedin: {
+	{
 		link: 'https://www.linkedin.com/in/sasha-ebersole-481a39257/',
 		name: "LinkedIn",
 	},
-};
+];
 
 function Address() {
 	return (
-			<address>
-				{Object.keys(CONTACT).map((key) => (
-					<a key={key} href={CONTACT[key].link}>{CONTACT[key].name}</a>
-				))}
-			</address>
+		<address>
+			{CONTACT.map((method) => (
+				<a key={method.name} href={method.link}>{method.name}</a>
+			))}
+		</address>
 	);
 }
 
