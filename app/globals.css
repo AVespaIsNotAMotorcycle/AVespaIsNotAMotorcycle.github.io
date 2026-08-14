@@ -78,7 +78,7 @@ h1::before,
 h1::after,
 section::before,
 section:first-child::after {
-	content: '';
+	/* content: ''; */
 	border: var(--border);
 	width: 1rem;
 	height: 1rem;
@@ -91,7 +91,7 @@ section:first-child::after {
 }
 /* SMALL DIAMOND */
 li::before {
-	content: '';
+	/* content: ''; */
 	border: var(--border);
 	width: 0.5rem;
 	height: 0.5rem;
