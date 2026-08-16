@@ -1,8 +1,8 @@
 * { margin: 0; }
 html {
 	--black: black;
-	--white: white;
-	--grey: #CFC9CF;
+	--white: #F5F5F5;
+	--grey: #D6D6D6;
 	--link: #3C7C69;
 	--border: 2px solid var(--grey);
 
