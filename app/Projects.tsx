@@ -40,9 +40,9 @@ const PROJECTS = [
 		repo: "https://github.com/AVespaIsNotAMotorcycle/Raschka-LLM",
 		description: "A GPT-style LLM created by working through Sebastian Raschka's book 'How to Build a Large Language Model (From Scratch)'",
 		problem: [
-			"I had no idea how LLMs worked under the hood.",
+			"Prior to reading this book, I had no idea how LLMs worked under the hood.",
 			"Additionally, I had no experience using PyTorch.",
-			"By working through Sebastian Raschka's book, I hoped to gain a deeper understanding",
+			"By working through Raschka's book, I hoped to gain a deeper understanding",
 			"of LLMs and deep learning in general.",
 		].join(' '),
 		approach: [].join(' '),
