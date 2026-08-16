@@ -36,7 +36,7 @@ const PROJECTS = [
 	},
 	{
 		name: "Raschka LLM",
-		link: "http://raschka.sasha-m-ebersole.com/",
+		link: "", // "http://raschka.sasha-m-ebersole.com/",
 		repo: "https://github.com/AVespaIsNotAMotorcycle/Raschka-LLM",
 		description: "A GPT-style LLM created by working through Sebastian Raschka's book 'How to Build a Large Language Model (From Scratch)'",
 		problem: [
@@ -78,6 +78,17 @@ function Tags(props: TagProps) {
 	);
 }
 
+type LinkProps = {
+	to: string;
+	name: string;
+};
+function Link(props: LinkProps) {
+	const { to, name } = props;
+	if (!to) return null;
+	if (!name) return null;
+	return <a href={to}>{name}</a>;
+}
+
 export default function Projects() {
 	return (
 		<section>
@@ -86,8 +97,8 @@ export default function Projects() {
 				<section key={project.name} className="project-card">
 					<div>
 						<h3>{project.name}</h3>
-						<a href={project.link}>Live app</a>
-						<a href={project.repo}>GitHub repo</a>
+						<Link to={project.link} name="Live app" />
+						<Link to={project.repo} name="GitHub repo" />
 					</div>
 					<div>
 						<p>{project.description}</p>
