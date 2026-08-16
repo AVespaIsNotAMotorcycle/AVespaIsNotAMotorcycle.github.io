@@ -26,7 +26,7 @@ const PROJECTS = [
 			"The final output is then collapsed from an array of tokens into a single word.",
 		].join(' '),
 		outcome: [
-			"Manually labelling characters, resulting in a small training set.",
+			"Manually labelling characters was time-intensive, resulting in a small training set.",
 			"The lack of training data meant that the model was unable to effectively generalize",
 			"to other words, resulting in low accuracy.",
 			"In the future, I aim to rebuild this using an encoder/decoder model trained",
