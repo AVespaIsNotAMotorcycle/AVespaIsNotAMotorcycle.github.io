@@ -6,6 +6,10 @@ export default function Home() {
 		<main>
 			<section>
 				<h1>Sasha Madden Ebersole</h1>
+				<p>
+					Aspiring ML engineer with experience in frontend and full-stack web
+					development.
+				</p>
 				<Address />
 			</section>
 			<section>
