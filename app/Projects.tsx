@@ -32,22 +32,40 @@ const PROJECTS = [
 			"In the future, I aim to rebuild this using an encoder/decoder model trained",
 			"on entire words, allowing it to use existing datasets.",
 		].join(' '),
-		tags: ['OCR', 'CTC', 'Computer Vision'],
+		tags: ['OCR', 'CTC', 'Computer Vision', 'Python'],
 	},
 	{
 		name: "Raschka LLM",
 		link: "http://raschka.sasha-m-ebersole.com/",
 		repo: "https://github.com/AVespaIsNotAMotorcycle/Raschka-LLM",
 		description: "A GPT-style LLM created by working through Sebastian Raschka's book 'How to Build a Large Language Model (From Scratch)'",
+		problem: [
+			"I had no idea how LLMs worked under the hood.",
+			"Additionally, I had no experience using PyTorch.",
+			"By working through Sebastian Raschka's book, I hoped to gain a deeper understanding",
+			"of LLMs and deep learning in general.",
+		].join(' '),
+		approach: [].join(' '),
+		outcome: [].join(' '),
+		tags: ['PyTorch', 'LLMs', 'Deep Learning', 'Python'],
 	},
 ];
 
 function Detail({ title, content }) {
+	if (!content) return <section />;
 	return (
 		<section>
 			<h4>{title}</h4>
 			<p>{content}</p>
 		</section>
+	);
+}
+
+function Tags({ tags = [] }) {
+	return (
+		<ul className="tags">
+			{tags.map((tag) => <li key={tag}>{tag}</li>)}
+		</ul>
 	);
 }
 
@@ -70,6 +88,7 @@ export default function Projects() {
 						<Detail title="Approach" content={project.approach} />
 						<Detail title="Next Steps" content={project.outcome} />
 					</div>
+					<Tags tags={project.tags} />
 				</section>
 			))}
 		</section>
