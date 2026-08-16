@@ -5,12 +5,12 @@ export default function About() {
 			<div>
 				<div>
 					<p>
-						Sasha is transitioning into machine learning engineering after working
+						I am transitioning into machine learning engineering after working
 						as a frontend developer at DataMixMaster and a full-stack developer at
 						Groenewold IT Solutions.
 					<p>
 					</p>
-						Outside of work they like to read about late imperial Chinese history,
+						Outside of work I like to read about late imperial Chinese history,
 						train Muay Thai, write poetry and short fiction, and draw.
 					</p>
 				</div>
