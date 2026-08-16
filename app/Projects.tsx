@@ -51,7 +51,12 @@ const PROJECTS = [
 	},
 ];
 
-function Detail({ title, content }) {
+type DetailProps = {
+	title: string;
+	content: string;
+};
+function Detail(props: DetailProps) {
+	const { title, content } = props;
 	if (!content) return <section />;
 	return (
 		<section>
@@ -61,7 +66,11 @@ function Detail({ title, content }) {
 	);
 }
 
-function Tags({ tags = [] }) {
+type TagProps = {
+	tags: string[];
+}
+function Tags(props: TagProps) {
+	const { tags } = props;
 	return (
 		<ul className="tags">
 			{tags.map((tag) => <li key={tag}>{tag}</li>)}
