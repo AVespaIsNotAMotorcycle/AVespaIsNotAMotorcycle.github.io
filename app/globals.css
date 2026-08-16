@@ -3,6 +3,7 @@ html {
 	--black: black;
 	--white: white;
 	--grey: DarkSlateGrey;
+	--link: #3F826D;
 	--border: 2px solid var(--grey);
 
 	font-family: sans-serif;
@@ -12,25 +13,46 @@ html {
 
 @media (prefers-color-scheme: dark) {
 	html {
-		--black: white;
-		--white: #273043;
-		--grey: LightGrey;
+		--black: #F7F7FF;
+		--white: #0F121A;
+		--grey: #273043;
+		--link: #83C3AF;
 	}
 }
 
 main {
-	padding: 0;
 	max-width: min(100svw, 50rem);
 	margin-inline: auto;
 	text-align: justify;
 	text-justify: inter-word;
 }
 
-h1 {
+h1, h2, h3, h4, h5, h6 {
 	font-family: serif;
+}
+
+h1 {
 	font-size: 2.5rem;
+}
+
+a {
+	color: var(--link);
 }
 
 main > section {
 	margin-top: 5rem;
+}
+
+.project-card {
+	border: var(--border);
+	padding: 1.5rem;
+	margin: 2rem 0;
+	border-radius: 1rem;
+}
+.project-card > div:first-child {
+	display: flex;
+	gap: 1rem;
+}
+.project-card > div:first-child > *:first-child {
+	flex-grow: 1;
 }
