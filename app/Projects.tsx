@@ -18,13 +18,16 @@ const PROJECTS = [
 
 export default function Projects() {
 	return (
-		<ul>
-			{PROJECTS.map((project) => (
-				<li key={project.name}>
-					<a href={project.link}>{project.name}</a>
-					{': '}{project.description}
-				</li>
-			))}
-		</ul>
+		<section>
+			<h2>Projects</h2>
+			<ul>
+				{PROJECTS.map((project) => (
+					<li key={project.name}>
+						<a href={project.link}>{project.name}</a>
+						{': '}{project.description}
+					</li>
+				))}
+			</ul>
+		</section>
 	)
 }
