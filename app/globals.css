@@ -13,7 +13,7 @@ html {
 @media (prefers-color-scheme: dark) {
 	html {
 		--black: white;
-		--white: black;
+		--white: #273043;
 		--grey: LightGrey;
 	}
 }
