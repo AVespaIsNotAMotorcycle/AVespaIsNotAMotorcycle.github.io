@@ -6,7 +6,7 @@ type Project = {
 const PROJECTS = [
 	{
 		name: "Dots and Circles",
-		link: "http://dots-and-circles.sasha-m-ebersole.com/",
+		link: "https://dots-and-circles.sasha-m-ebersole.com/",
 		repo: "https://github.com/AVespaIsNotAMotorcycle/dots-and-circles",
 		description: "Dots and Circles is my first non-tutorial machine learning project. It is an app for optical character recognition of Manchu-language text.",
 		problem: [
