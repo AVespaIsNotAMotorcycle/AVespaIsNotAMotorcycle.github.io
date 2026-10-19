@@ -1,6 +1,8 @@
+import Box from './Box';
+
 export default function About() {
   return (
-		<section className="about">
+		<Box section>
 			<h2>About Sasha</h2>
 			<div>
 				<div>
@@ -25,6 +27,6 @@ export default function About() {
 					</dl>
 				</aside>
 			</div>
-		</section>
+		</Box>
   );
 }

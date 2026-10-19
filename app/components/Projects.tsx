@@ -1,3 +1,7 @@
+import Box from './Box';
+import Tabs from './Tabs';
+import Tab from './Tab';
+
 type Project = {
 	name: string;
 	link: string;
@@ -66,6 +70,22 @@ const PROJECTS = [
 		].join(' '),
 		tags: ['PyTorch', 'LLMs', 'Deep Learning', 'Python'],
 	},
+	{
+		name: "Tracer",
+		link: "https://tracer.quellen.io/",
+		repo: "https://github.com/AVespaIsNotAMotorcycle/tracer",
+		description: "Tracer maps citation networks for academic work, with a focus on the humanities and especially history.",
+		problem: [
+			"Prior to reading this book, I had no idea how LLMs worked under the hood.",
+		].join(' '),
+		approach: [
+			"Working chapter by chapter, I implemented the LLM with PyTorch.",
+		].join(' '),
+		outcome: [
+			"Over the course of this book I learned a lot about model architecture and training,",
+		].join(' '),
+		tags: ['PyTorch', 'LLMs', 'Deep Learning', 'Python'],
+	},
 ];
 
 type DetailProps = {
@@ -106,27 +126,33 @@ function Link(props: LinkProps) {
 	return <a href={to}>{name}</a>;
 }
 
+function Project({ project }) {
+	return (
+		<Box section className="project-card">
+			<div className="heading">
+				<h3>{project.name}</h3>
+				<Link to={project.link} name="Live app" />
+				<Link to={project.repo} name="GitHub repo" />
+			</div>
+			<div>
+				<p>{project.description}</p>
+			</div>
+			<Tabs className="details" level={4}>
+				<Tab title="Problem" level={4}><p>{project.problem}</p></Tab>
+				<Tab title="Approach" level={4}><p>{project.approach}</p></Tab>
+				<Tab title="Next Steps" level={4}><p>{project.outcome}</p></Tab>
+			</Tabs>
+			<Tags tags={project.tags} />
+		</Box>
+	);
+}
+
 export default function Projects() {
 	return (
 		<section>
 			<h2>Projects</h2>
 			{PROJECTS.map((project) => (
-				<section key={project.name} className="project-card">
-					<div>
-						<h3>{project.name}</h3>
-						<Link to={project.link} name="Live app" />
-						<Link to={project.repo} name="GitHub repo" />
-					</div>
-					<div>
-						<p>{project.description}</p>
-					</div>
-					<div className="details">
-						<Detail title="Problem" content={project.problem} />
-						<Detail title="Approach" content={project.approach} />
-						<Detail title="Next Steps" content={project.outcome} />
-					</div>
-					<Tags tags={project.tags} />
-				</section>
+				<Project project={project} key={project.name} />
 			))}
 		</section>
 	)
