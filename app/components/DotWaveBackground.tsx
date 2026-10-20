@@ -30,7 +30,7 @@ export default function DotWaveBackground({
   dotRadius = 1.6,
   color = 'currentColor',
   waveAmplitude = 7,
-  waveSpeed = 100,
+  waveSpeed = 50,
   rippleInterval = 2600,
   interactive = true,
   className,

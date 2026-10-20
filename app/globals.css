@@ -1,121 +1,230 @@
-* { margin: 0; }
-html {
-	--black: black;
-	--white: #F5F5F5;
-	--grey: #D6D6D6;
-	--darkgrey: #1E2434;
-	--link: #3C7C69;
-	--border: 2px solid var(--grey);
+/* === CSS Reset (https://www.joshwcomeau.com/css/custom-css-reset/) === */
 
-	--section-gap: 3rem;
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-	font-family: sans-serif;
-	color: var(--black);
-	background: var(--white);
-	line-height: 175%;
+/* 2. Remove default margin */
+*:not(dialog) {
+  margin: 0;
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  /* 4. Increase line-height */
+  line-height: 1.5;
+  /* 5. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 6. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 8. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* 9. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
 }
 
 /*
-@media (prefers-color-scheme: dark) {
-	html {
-		--black: #F7F7FF;
-		--white: #0F121A;
-		--grey: #273043;
-		--darkgrey: #D6D6D6;
-		--link: #83C3AF;
-	}
-}
+  10. Create a root stacking context
 */
+#root, #__next {
+  isolation: isolate;
+}
 
-main {
-	max-width: min(90svw, 60rem);
-	margin-inline: auto;
-	padding: 5rem 0;
+/* === Globals === */
+
+html {
+	--background: #E9E4F1;
+	--text: #5D6F62;
+	--active: #C0300C;
+	--border: #1E1B22;
+
+	background-color: var(--background);
+	color: var(--text);
+
+	font-family: sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: serif;
 }
 
-h1 {
-	font-size: 2.5rem;
-	margin-bottom: 1rem;
-	line-height: 150%;
+main {
+	--heading: #5D6F62;
+	--text: #1E1B22;
+}
+
+canvas.background {
+	opacity: 0.4;
+}
+
+button {
+	border: none;
+	background: transparent;
+	font: inherit;
+	color: inherit;
+	font-weight: bold;
 }
 
 a {
-	color: var(--link);
-}
-
-.box {
-	padding: 2rem 1rem;
-	margin: 1rem 0;
-	outline: 1px solid gray;
-	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
-	background-color: var(--white);
-}
-
-/* Tabs */
-
-.tabs .tab.closed {
-	background: red;
-	display: none;
-}
-
-.tabs .tab-title {
-	display: none;
-}
-
-.tabs .tab-selection {
-	display: flex;
-	padding: 0;
-	margin: 0;
-	list-style-type: none;
-	gap: 2rem;
-}
-
-.tabs .tab-selection button {
-	font-size: inherit;
-	border: 0;
-	background: none;
-	padding: 1rem 0;
-	margin: 1rem 0;
-	font-weight: 800;
-	border-width: 0px;
-	border-bottom-width: 5px;
-	border-style: solid;
-	border-color: transparent;
-	transition-property: border-bottom-color color;
+	color: inherit;
+	transition-property: color;
 	transition-duration: 0.2s;
 }
-.tabs .tab-selection button:hover,
-.tabs .tab-selection button:focus {
-	color: var(--link);
-	cursor: pointer;
+button:active,
+button:hover,
+button:focus,
+a:active,
+a:hover,
+a:focus {
+	color: var(--active);
 }
 
-.tabs .tab-selection .open button {
-	border-bottom-color: var(--link);
+button:hover,
+a:hover { cursor: pointer; }
+
+/* === Homepage === */
+
+main .fullscreen {
+	height: 100svh;
 }
 
-/* Projects */
-
-.tags {
+main .homepage {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	font-weight: bold;
+	font-size: 1.25rem;
+}
+main .homepage ul {
 	list-style-type: none;
-	margin: 2rem 0 0 0;
+	padding: 0;
+	margin: 0;
+	font-size: 10rem;
+}
+main .homepage ul a {
+	text-decoration: none;
+}
+
+/* === Projects === */
+
+main section.projects {
+	padding: 4rem;
+	padding-right: 12rem;
+}
+
+main .projects > .content {
+	display: grid;
+	grid-template-columns: 20rem 1fr;
+	gap: 4rem;
+}
+
+.projects .project-selection {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	margin-top: 5rem;
+	font-size: 2rem;
+	text-align: right;
+	font-family: serif;
+}
+.projects .project-selection > * {
+	margin: 2rem 0;
+}
+
+main section.projects h3 {
+	font-size: 5rem;
+	font-weight: bold;
+}
+
+main section.projects .heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+main section.projects .heading .links {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	text-align: right;
+}
+
+.projects .details {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 4rem;
+	margin: 4rem 0;
+}
+
+.project-card {
+	transition-property: opacity max-height;
+	transition-duration: 0.5s;
+}
+.project-card.view {
+	max-height: 80svh;
+}
+.project-card.hide {
+	opacity: 0;
+	max-height: 0;
+}
+
+ul.tags {
+	display: flex;
+	list-style-type: none;
+	padding: 0;
+	margin: 8rem 0 0 0;
+	gap: 2rem;
+}
+ul.tags li {
+	border-radius: 15px;
+	font-family: serif;
+	font-weight: bold;
+}
+
+/* === Tabs === */
+
+.tab-selection {
+	list-style-type: none;
+	margin: 2rem 0;
 	padding: 0;
 	display: flex;
 	gap: 2rem;
 }
-.tags > * {
-	border: var(--border);
-	padding: 0.5rem 1rem;
+
+.tab-selection .open button {
+	border-bottom: 5px solid transparent;
+}
+.tab-selection .open button {
+	font-family: serif;
+	border-color: var(--active);
 }
 
-.project-card .heading {
-	display: flex;
-	gap: 1rem;
+.tab.closed {
+	display: none;
 }
-.project-card .heading h3 {
-	flex-grow: 1;
-}
+.tab h3 { display: none; }
