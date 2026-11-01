@@ -3,7 +3,7 @@ export const GITHUB_USER = 'AVespaIsNotAMotorcycle';
 export const CONTACT = {
 	email: 'sasha.m.ebersole@gmail.com',
 	github: `https://github.com/${GITHUB_USER}`,
-	linkedin: 'https://www.linkedin.com/in/sasha-ebersole-481a39257/',
+	linkedin: 'https://www.linkedin.com/in/sasha-m-ebersole/',
 };
 
 export type Repo = {
