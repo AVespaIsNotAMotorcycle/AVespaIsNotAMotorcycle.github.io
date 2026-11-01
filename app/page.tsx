@@ -1,5 +1,6 @@
 import ReadingGroupTable from './components/ReadingGroup';
 import RepoTable from './components/RepoTable';
+import ThemeToggle from './components/ThemeToggle';
 import {
 	CONTACT,
 	EXPERIENCE,
@@ -10,7 +11,10 @@ export default function Home() {
 	return (
 		<main className="page">
 			<header className="intro">
-				<div className="prompt mono">~/sasha-m-ebersole $ cat README.md</div>
+				<div className="topbar">
+					<div className="prompt mono">~/sasha-m-ebersole $ cat README.md</div>
+					<ThemeToggle />
+				</div>
 				<h1>Sasha Madden Ebersole</h1>
 				<p className="lede">
 					Software engineer in Seattle. I build neural networks from scratch — my Manchu

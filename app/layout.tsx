@@ -20,9 +20,16 @@ export const metadata: Metadata = {
     "Seattle software engineer building neural networks by hand and heading toward mechanistic interpretability.",
 };
 
+// Applies a saved theme choice before first paint, so there's no flash of the wrong theme.
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    // The theme script may set data-theme before React hydrates.
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );
