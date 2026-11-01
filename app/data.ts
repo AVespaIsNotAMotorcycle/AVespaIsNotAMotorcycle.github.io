@@ -36,6 +36,7 @@ export const READING_GROUP_URL = `${CONTACT.github}/${READING_GROUP}`;
 export type TalkNotes = {
 	/** Replaces the title read from the PDF's filename. */
 	title?: string;
+	/** Replaces the authors looked up on Semantic Scholar by the paper's title. */
 	authors?: string;
 	/** Shown under the paper as "↳ …". */
 	note?: string;
@@ -43,7 +44,8 @@ export type TalkNotes = {
 
 /**
  * Optional hand-written extras for talks, keyed by the PDF's path in the repo.
- * Talks without an entry still show, titled from their filename.
+ * Talks without an entry still show, titled from their filename, with
+ * authors looked up by that title.
  */
 export const TALK_NOTES: Record<string, TalkNotes> = {
 	'2026-10-19/An Image is Worth 16x16 Words_ Transformers for Image Recognition at Scale.pdf': {
@@ -51,12 +53,10 @@ export const TALK_NOTES: Record<string, TalkNotes> = {
 		authors: 'Dosovitskiy et al., 2020 · ViT',
 	},
 	'2026-10-05/Adam_ A Method for Stochastic Optimization.pdf': {
-		authors: 'Kingma & Ba, 2014',
 		note: 'implemented by hand in Dots and Circles',
 	},
 	'2026-09-14/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models-1.pdf': {
 		title: 'Chain-of-Thought Prompting Elicits Reasoning in LLMs',
-		authors: 'Wei et al., 2022',
 		note: 'background for my reasoning fine-tune',
 	},
 };

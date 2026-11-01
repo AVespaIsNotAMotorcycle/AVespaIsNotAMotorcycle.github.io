@@ -1,10 +1,18 @@
 'use client';
 
 import { READING_GROUP_URL } from '../data';
+import { usePaperAuthors } from '../lib/papers';
 import { formatTalkDate, useTalks } from '../lib/readingGroup';
 
 export default function ReadingGroupTable() {
 	const state = useTalks();
+	// Authors load after the table, so a slow lookup never holds up the talk list.
+	const toLookUp = state.status === 'ready'
+		? state.data.talks.filter((t) => !t.authors).map((t) => t.paperTitle)
+		: [];
+	const lookedUp = usePaperAuthors(toLookUp);
+	const authorsOf = (t: { authors?: string; paperTitle: string }) =>
+		t.authors ?? (lookedUp.status === 'ready' ? lookedUp.data[t.paperTitle] : undefined);
 
 	if (state.status === 'error') {
 		return (
@@ -46,7 +54,7 @@ export default function ReadingGroupTable() {
 								</td>
 								<td>
 									<div className={t.mine ? 'strong' : undefined}>{t.title}</div>
-									{t.authors && <div className="authors">{t.authors}</div>}
+									{authorsOf(t) && <div className="authors">{authorsOf(t)}</div>}
 									{t.note && <div className="mono talk-link">↳ {t.note}</div>}
 								</td>
 								<td className={t.mine ? 'me' : undefined}>{t.presenter}</td>

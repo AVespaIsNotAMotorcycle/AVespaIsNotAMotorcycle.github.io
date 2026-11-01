@@ -7,6 +7,9 @@ export type Talk = {
 	path: string;
 	date: string; // YYYY-MM-DD, from the folder name
 	title: string;
+	/** Full title from the filename, used to look up authors. */
+	paperTitle: string;
+	/** Hand-written credit from TALK_NOTES; otherwise looked up by `paperTitle`. */
 	authors?: string;
 	note?: string;
 	presenter: string;
@@ -57,10 +60,12 @@ async function loadTalks(): Promise<{ talks: Talk[]; total: number }> {
 	const talks = await Promise.all(newest.map(async ({ path, date, file }) => {
 		const person = await fileAdder(READING_GROUP, path).catch(() => null);
 		const notes = TALK_NOTES[path] ?? {};
+		const paperTitle = titleFromFilename(file);
 		return {
 			path,
 			date,
-			title: notes.title ?? titleFromFilename(file),
+			title: notes.title ?? paperTitle,
+			paperTitle,
 			authors: notes.authors,
 			note: notes.note,
 			presenter: person?.name ?? '—',
