@@ -21,7 +21,7 @@ export default function RepoTable() {
 				</thead>
 				<tbody>
 					{REPOS.map((repo) => {
-						const info = state.status === 'ready' ? state.repos[repo.name] : undefined;
+						const info = state.status === 'ready' ? state.data[repo.name] : undefined;
 						const pushed = info?.lastCommit;
 						return (
 							<tr key={repo.name}>

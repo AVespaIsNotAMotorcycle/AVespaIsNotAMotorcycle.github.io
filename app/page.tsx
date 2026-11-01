@@ -1,9 +1,9 @@
+import ReadingGroupTable from './components/ReadingGroup';
 import RepoTable from './components/RepoTable';
 import {
 	CONTACT,
 	EXPERIENCE,
 	READING_GROUP_URL,
-	TALKS,
 } from './data';
 
 export default function Home() {
@@ -67,33 +67,7 @@ export default function Home() {
 					paper each, every meeting. Every deck is in{' '}
 					<a href={READING_GROUP_URL}>reading-group</a>.
 				</p>
-				<div className="table-scroll">
-					<table>
-						<thead>
-							<tr>
-								<th scope="col">date</th>
-								<th scope="col">paper</th>
-								<th scope="col">presenter</th>
-								<th scope="col" className="num">slides</th>
-							</tr>
-						</thead>
-						<tbody>
-							{TALKS.map((t) => (
-								<tr key={t.slides}>
-									<td className="mono muted nowrap">{t.date}</td>
-									<td>
-										<div className={t.mine ? 'strong' : undefined}>{t.paper}</div>
-										<div className="authors">{t.authors}</div>
-										{t.link && <div className="mono talk-link">↳ {t.link}</div>}
-									</td>
-									<td className={t.mine ? 'me' : undefined}>{t.presenter}</td>
-									<td className="num mono"><a href={t.slides}>pdf</a></td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-				<div className="mono note">newest first · presenter = GitHub profile name of who added the folder</div>
+				<ReadingGroupTable />
 			</section>
 
 			<section>

@@ -219,6 +219,14 @@ td.me { color: var(--accent); }
   color: var(--accent);
 }
 
+.skeleton {
+  display: block;
+  height: 12px;
+  margin: 4px 0;
+  border-radius: 2px;
+  background: var(--rule);
+}
+
 /* === Experience === */
 
 .experience {

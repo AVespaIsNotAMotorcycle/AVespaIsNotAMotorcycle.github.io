@@ -4,21 +4,69 @@ import { useEffect, useState } from 'react';
 
 import { GITHUB_USER } from '../data';
 
+export const API = 'https://api.github.com';
+
+export const HOUR = 60 * 60 * 1000;
+
+export type Loaded<T> =
+	| { status: 'loading' }
+	| { status: 'error' }
+	| { status: 'ready'; data: T };
+
+export async function ghJson<T>(path: string): Promise<{ body: T; res: Response }> {
+	const res = await fetch(`${API}${path}`);
+	if (!res.ok) throw new Error(`GitHub ${res.status} for ${path}`);
+	return { body: await res.json(), res };
+}
+
+/** Runs `fn` at most once per `ttl` per browser, keeping the result in localStorage. */
+export async function cached<T>(key: string, ttl: number, fn: () => Promise<T>): Promise<T> {
+	try {
+		const raw = localStorage.getItem(key);
+		if (raw) {
+			const { at, value } = JSON.parse(raw);
+			if (Date.now() - at < ttl) return value;
+		}
+	} catch {
+		// unreadable cache; fetch fresh
+	}
+	const value = await fn();
+	try {
+		localStorage.setItem(key, JSON.stringify({ at: Date.now(), value }));
+	} catch {
+		// storage unavailable; skip caching
+	}
+	return value;
+}
+
+/** Loads `fn` once on mount (and again when `key` changes). */
+export function useLoaded<T>(key: string, fn: () => Promise<T>): Loaded<T> {
+	const [state, setState] = useState<Loaded<T>>({ status: 'loading' });
+	useEffect(() => {
+		let alive = true;
+		fn()
+			.then((data) => { if (alive) setState({ status: 'ready', data }); })
+			.catch(() => { if (alive) setState({ status: 'error' }); });
+		return () => { alive = false; };
+		// fn is re-created each render; key identifies what it loads
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [key]);
+	return state;
+}
+
+/* === Repo stats === */
+
 export type RepoInfo = {
 	commitCount: number | null;
 	lastCommit: string | null;
 };
 
-type State =
-	| { status: 'loading' }
-	| { status: 'error' }
-	| { status: 'ready'; repos: Record<string, RepoInfo> };
-
-const CACHE_KEY = 'gh-repos-v1';
-const CACHE_TTL = 60 * 60 * 1000; // one hour
-
 type ApiCommit = {
-	commit: { author: { date: string } | null; committer: { date: string } | null };
+	author: { login: string } | null;
+	commit: {
+		author: { name: string; date: string } | null;
+		committer: { date: string } | null;
+	};
 };
 
 /**
@@ -26,9 +74,9 @@ type ApiCommit = {
  * and its `rel="last"` page number is the total commit count.
  */
 async function fetchRepo(repo: string): Promise<RepoInfo> {
-	const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${repo}/commits?per_page=1`);
-	if (!res.ok) throw new Error(`GitHub ${res.status}`);
-	const body: ApiCommit[] = await res.json();
+	const { body, res } = await ghJson<ApiCommit[]>(
+		`/repos/${GITHUB_USER}/${repo}/commits?per_page=1`,
+	);
 	const last = res.headers.get('link')?.match(/[?&]page=(\d+)>; rel="last"/);
 	const newest = body[0]?.commit;
 	return {
@@ -37,47 +85,40 @@ async function fetchRepo(repo: string): Promise<RepoInfo> {
 	};
 }
 
-function readCache(key: string): Record<string, RepoInfo> | null {
-	try {
-		const raw = localStorage.getItem(CACHE_KEY);
-		if (!raw) return null;
-		const cached = JSON.parse(raw);
-		if (cached.key !== key || Date.now() - cached.at > CACHE_TTL) return null;
-		return cached.repos;
-	} catch {
-		return null;
-	}
-}
-
-function writeCache(key: string, repos: Record<string, RepoInfo>) {
-	try {
-		localStorage.setItem(CACHE_KEY, JSON.stringify({ key, at: Date.now(), repos }));
-	} catch {
-		// storage unavailable; skip caching
-	}
-}
-
-async function load(names: string[]): Promise<Record<string, RepoInfo>> {
+export function useRepoInfo(names: string[]): Loaded<Record<string, RepoInfo>> {
 	const key = names.join(',');
-	const cached = readCache(key);
-	if (cached) return cached;
-	const infos = await Promise.all(names.map(fetchRepo));
-	const repos = Object.fromEntries(names.map((n, i) => [n, infos[i]]));
-	writeCache(key, repos);
-	return repos;
+	return useLoaded(key, () => cached(`gh-repos-v2:${key}`, HOUR, async () => {
+		const infos = await Promise.all(names.map(fetchRepo));
+		return Object.fromEntries(names.map((n, i) => [n, infos[i]]));
+	}));
 }
 
-export function useRepoInfo(names: string[]): State {
-	const [state, setState] = useState<State>({ status: 'loading' });
-	const key = names.join(',');
-	useEffect(() => {
-		let alive = true;
-		load(key.split(','))
-			.then((repos) => { if (alive) setState({ status: 'ready', repos }); })
-			.catch(() => { if (alive) setState({ status: 'error' }); });
-		return () => { alive = false; };
-	}, [key]);
-	return state;
+/* === Commit authors === */
+
+export type Person = { login: string | null; name: string };
+
+/** Who made the oldest commit touching `path` in `repo`, i.e. who added it. */
+export function fileAdder(repo: string, path: string): Promise<Person> {
+	// Who added a file never changes, so this is cached for a long time.
+	return cached(`gh-adder-v1:${repo}/${path}`, 30 * 24 * HOUR, async () => {
+		const query = new URLSearchParams({ path, per_page: '100' });
+		const { body } = await ghJson<ApiCommit[]>(
+			`/repos/${GITHUB_USER}/${repo}/commits?${query}`,
+		);
+		const oldest = body[body.length - 1];
+		if (!oldest) throw new Error(`no commits for ${path}`);
+		const login = oldest.author?.login ?? null;
+		const gitName = oldest.commit.author?.name ?? 'unknown';
+		return { login, name: login ? await profileName(login) : gitName };
+	});
+}
+
+/** A user's GitHub profile name, falling back to their login. */
+function profileName(login: string): Promise<string> {
+	return cached(`gh-user-v1:${login}`, 7 * 24 * HOUR, async () => {
+		const { body } = await ghJson<{ name: string | null }>(`/users/${login}`);
+		return body.name?.trim() || login;
+	});
 }
 
 export function timeAgo(iso: string): string {

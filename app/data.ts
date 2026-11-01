@@ -26,48 +26,40 @@ export const REPOS: Repo[] = [
 	},
 ];
 
-const READING_GROUP = `${CONTACT.github}/reading-group`;
-export const READING_GROUP_URL = READING_GROUP;
+/**
+ * The reading-group repo: every `YYYY-MM-DD/<paper title>.pdf` in it becomes
+ * a talk on the page, presented by whoever committed that PDF.
+ */
+export const READING_GROUP = 'reading-group';
+export const READING_GROUP_URL = `${CONTACT.github}/${READING_GROUP}`;
 
-export type Talk = {
-	date: string;
-	paper: string;
-	authors: string;
-	link?: string;
-	presenter: string;
-	mine?: boolean;
-	slides: string;
+export type TalkNotes = {
+	/** Replaces the title read from the PDF's filename. */
+	title?: string;
+	authors?: string;
+	/** Shown under the paper as "↳ …". */
+	note?: string;
 };
 
-/** Newest first. */
-export const TALKS: Talk[] = [
-	{
-		date: 'Oct 19',
-		paper: 'An Image is Worth 16x16 Words',
+/**
+ * Optional hand-written extras for talks, keyed by the PDF's path in the repo.
+ * Talks without an entry still show, titled from their filename.
+ */
+export const TALK_NOTES: Record<string, TalkNotes> = {
+	'2026-10-19/An Image is Worth 16x16 Words_ Transformers for Image Recognition at Scale.pdf': {
+		title: 'An Image is Worth 16x16 Words',
 		authors: 'Dosovitskiy et al., 2020 · ViT',
-		presenter: 'Sasha Ebersole',
-		mine: true,
-		slides: `${READING_GROUP}/blob/main/2026-10-19/An%20Image%20is%20Worth%2016x16%20Words_%20Transformers%20for%20Image%20Recognition%20at%20Scale.pdf`,
 	},
-	{
-		date: 'Oct 5',
-		paper: 'Adam: A Method for Stochastic Optimization',
+	'2026-10-05/Adam_ A Method for Stochastic Optimization.pdf': {
 		authors: 'Kingma & Ba, 2014',
-		link: 'implemented by hand in Dots and Circles',
-		presenter: 'Sasha Ebersole',
-		mine: true,
-		slides: `${READING_GROUP}/blob/main/2026-10-05/Adam_%20A%20Method%20for%20Stochastic%20Optimization.pdf`,
+		note: 'implemented by hand in Dots and Circles',
 	},
-	{
-		date: 'Sep 14',
-		paper: 'Chain-of-Thought Prompting Elicits Reasoning in LLMs',
+	'2026-09-14/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models-1.pdf': {
+		title: 'Chain-of-Thought Prompting Elicits Reasoning in LLMs',
 		authors: 'Wei et al., 2022',
-		link: 'background for my reasoning fine-tune',
-		presenter: 'Sasha Ebersole',
-		mine: true,
-		slides: `${READING_GROUP}/blob/main/2026-09-14/Chain-of-Thought%20Prompting%20Elicits%20Reasoning%20in%20Large%20Language%20Models-1.pdf`,
+		note: 'background for my reasoning fine-tune',
 	},
-];
+};
 
 export const EXPERIENCE: { when: string; what: string }[] = [
 	{ when: '2026–', what: 'AI Trainer, DataAnnotation — evaluating coding agents' },
