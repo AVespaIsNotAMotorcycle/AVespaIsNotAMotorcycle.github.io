@@ -67,8 +67,8 @@ export default function Home() {
 					<a href={READING_GROUP_URL} className="mono note-link">all talks + slides →</a>
 				</div>
 				<p className="body">
-					Since August 2026, a few friends and I meet to present ML and CS papers — one
-					paper each, every meeting. Every deck is in{' '}
+					Since August 2026, a few friends and I have met to present ML and CS papers
+					every few weeks. Every deck is in{' '}
 					<a href={READING_GROUP_URL}>reading-group</a>.
 				</p>
 				<ReadingGroupTable />
