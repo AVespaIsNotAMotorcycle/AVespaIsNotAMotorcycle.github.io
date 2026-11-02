@@ -1,7 +1,7 @@
 'use client';
 
 import { GITHUB_USER, READING_GROUP, TALK_NOTES } from '../data';
-import BUILT_PAPERS from '../talkAuthors.generated.json';
+import BUILT_PAPERS from '../talkPapers.generated.json';
 import { cached, fileAdder, ghJson, HOUR, useLoaded } from './github';
 import type { Paper } from './openalex';
 import { TALK_PATH, titleFromFilename } from './talkFiles';
@@ -11,7 +11,7 @@ export type Talk = {
 	date: string; // YYYY-MM-DD, from the folder name
 	/**
 	 * `title` and `authors` come from TALK_NOTES, else from OpenAlex at build
-	 * time (talkAuthors.generated.json). `lookedUp` is false for talks added
+	 * time (talkPapers.generated.json). `lookedUp` is false for talks added
 	 * since the last build: the page looks those up live by `paperTitle`.
 	 */
 	title?: string;

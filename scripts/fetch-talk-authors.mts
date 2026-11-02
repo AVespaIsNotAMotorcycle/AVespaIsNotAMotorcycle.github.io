@@ -1,7 +1,7 @@
 /**
  * Pre-build: looks up each paper in the reading-group repo on OpenAlex (its
  * title as OpenAlex has it, and its authors) and saves them to
- * app/talkAuthors.generated.json, so the page has them on load. Talks whose
+ * app/talkPapers.generated.json, so the page has them on load. Talks whose
  * title and authors are both hand-written in TALK_NOTES are skipped. Talks added
  * after the build are still looked up live in the browser.
  *
@@ -23,7 +23,7 @@ import { GITHUB_USER, READING_GROUP, TALK_NOTES } from '../app/data.ts';
 import { lookupPaper, type Paper } from '../app/lib/openalex.ts';
 import { TALK_PATH, titleFromFilename } from '../app/lib/talkFiles.ts';
 
-const OUT = new URL('../app/talkAuthors.generated.json', import.meta.url);
+const OUT = new URL('../app/talkPapers.generated.json', import.meta.url);
 
 async function listTalkPdfs(): Promise<{ path: string; title: string }[]> {
 	const token = process.env.GITHUB_TOKEN;

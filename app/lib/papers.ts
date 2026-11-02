@@ -5,7 +5,7 @@ import { lookupPaper, titleKey, type Paper } from './openalex';
 
 /**
  * Live paper lookups for talks added since the last build (built ones come
- * from talkAuthors.generated.json). Keyless: a key would be public in the
+ * from talkPapers.generated.json). Keyless: a key would be public in the
  * page. Keyless requests get a small daily budget per IP address, i.e. per
  * visitor, which covers a few lookups a visit easily.
  */
