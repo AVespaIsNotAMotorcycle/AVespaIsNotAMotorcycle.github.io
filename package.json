@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "fetch-authors": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/fetch-talk-authors.mts",
+    "prebuild": "npm run fetch-authors",
+    "push": "sh scripts/push.sh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

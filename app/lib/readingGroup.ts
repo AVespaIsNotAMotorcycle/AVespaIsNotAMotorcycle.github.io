@@ -1,7 +1,9 @@
 'use client';
 
 import { GITHUB_USER, READING_GROUP, TALK_NOTES } from '../data';
+import BUILT_AUTHORS from '../talkAuthors.generated.json';
 import { cached, fileAdder, ghJson, HOUR, useLoaded } from './github';
+import { TALK_PATH, titleFromFilename } from './talkFiles';
 
 export type Talk = {
 	path: string;
@@ -9,7 +11,10 @@ export type Talk = {
 	title: string;
 	/** Full title from the filename, used to look up authors. */
 	paperTitle: string;
-	/** Hand-written credit from TALK_NOTES; otherwise looked up by `paperTitle`. */
+	/**
+	 * From TALK_NOTES, else looked up at build time (talkAuthors.generated.json);
+	 * talks added since the last build are looked up live by `paperTitle`.
+	 */
 	authors?: string;
 	note?: string;
 	presenter: string;
@@ -20,18 +25,7 @@ export type Talk = {
 /** Talks shown on the page; the rest are a click away in the repo. */
 const MAX_TALKS = 8;
 
-const TALK_PATH = /^(\d{4}-\d{2}-\d{2})\/([^/]+)\.pdf$/i;
-
 type Tree = { tree: { path: string; type: string }[] };
-
-/** "Adam_ A Method for Stochastic Optimization-1" → "Adam: A Method for Stochastic Optimization" */
-function titleFromFilename(name: string): string {
-	return name
-		.replace(/-\d+$/, '') // browser "-1" download suffixes
-		.replace(/_ /g, ': ') // colons are swapped for underscores in filenames
-		.replace(/_/g, ' ')
-		.trim();
-}
 
 function slidesUrl(path: string): string {
 	const encoded = path.split('/').map(encodeURIComponent).join('/');
@@ -66,7 +60,7 @@ async function loadTalks(): Promise<{ talks: Talk[]; total: number }> {
 			date,
 			title: notes.title ?? paperTitle,
 			paperTitle,
-			authors: notes.authors,
+			authors: notes.authors ?? (BUILT_AUTHORS as Record<string, string>)[path],
 			note: notes.note,
 			presenter: person?.name ?? '—',
 			mine: person?.login === GITHUB_USER,

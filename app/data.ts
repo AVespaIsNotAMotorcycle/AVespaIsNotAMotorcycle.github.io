@@ -36,7 +36,7 @@ export const READING_GROUP_URL = `${CONTACT.github}/${READING_GROUP}`;
 export type TalkNotes = {
 	/** Replaces the title read from the PDF's filename. */
 	title?: string;
-	/** Replaces the authors looked up on Semantic Scholar by the paper's title. */
+	/** Replaces the authors looked up on OpenAlex by the paper's title. */
 	authors?: string;
 	/** Shown under the paper as "↳ …". */
 	note?: string;
