@@ -1,18 +1,19 @@
 'use client';
 
 import { READING_GROUP_URL } from '../data';
-import { usePaperAuthors } from '../lib/papers';
-import { formatTalkDate, useTalks } from '../lib/readingGroup';
+import { usePapers } from '../lib/papers';
+import { formatTalkDate, useTalks, type Talk } from '../lib/readingGroup';
 
 export default function ReadingGroupTable() {
 	const state = useTalks();
-	// Authors load after the table, so a slow lookup never holds up the talk list.
+	// Papers load after the table, so a slow lookup never holds up the talk list.
 	const toLookUp = state.status === 'ready'
-		? state.data.talks.filter((t) => !t.authors).map((t) => t.paperTitle)
+		? state.data.talks.filter((t) => !t.lookedUp).map((t) => t.paperTitle)
 		: [];
-	const lookedUp = usePaperAuthors(toLookUp);
-	const authorsOf = (t: { authors?: string; paperTitle: string }) =>
-		t.authors ?? (lookedUp.status === 'ready' ? lookedUp.data[t.paperTitle] : undefined);
+	const papers = usePapers(toLookUp);
+	const live = (t: Talk) => (papers.status === 'ready' ? papers.data[t.paperTitle] : undefined);
+	const titleOf = (t: Talk) => t.title ?? live(t)?.title ?? t.paperTitle;
+	const authorsOf = (t: Talk) => t.authors ?? live(t)?.authors ?? undefined;
 
 	if (state.status === 'error') {
 		return (
@@ -53,7 +54,7 @@ export default function ReadingGroupTable() {
 									<time dateTime={t.date}>{formatTalkDate(t.date)}</time>
 								</td>
 								<td>
-									<div className={t.mine ? 'strong' : undefined}>{t.title}</div>
+									<div className={t.mine ? 'strong' : undefined}>{titleOf(t)}</div>
 									{authorsOf(t) && <div className="authors">{authorsOf(t)}</div>}
 									{t.note && <div className="mono talk-link">↳ {t.note}</div>}
 								</td>

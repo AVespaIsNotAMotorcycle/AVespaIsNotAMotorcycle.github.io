@@ -1,4 +1,18 @@
 {
-	"2026-10-05/Adam_ A Method for Stochastic Optimization.pdf": "Kingma & Ba, 2014",
-	"2026-09-14/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models-1.pdf": "Wei et al., 2022"
+	"2026-10-19/Deep_Learning-based_classification_of_resident_space_objects_with_non-periodic_light_curves.pdf": {
+		"title": "Deep learning-based classification of resident space objects with non-periodic light curves",
+		"authors": "Zhao et al., 2026"
+	},
+	"2026-10-05/Adam_ A Method for Stochastic Optimization.pdf": {
+		"title": "Adam: A Method for Stochastic Optimization",
+		"authors": "Kingma & Ba, 2014"
+	},
+	"2026-09-14/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models-1.pdf": {
+		"title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+		"authors": "Wei et al., 2022"
+	},
+	"2026-09-14/Attention_Is_All_You_Need.pdf": {
+		"title": "Attention Is All You Need",
+		"authors": "Vaswani et al., 2017"
+	}
 }

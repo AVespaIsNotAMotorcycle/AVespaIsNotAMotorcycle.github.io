@@ -1,7 +1,8 @@
 /**
- * Pre-build: looks up authors on OpenAlex for every talk in the reading-group
- * repo that has none in TALK_NOTES, and saves them to
- * app/talkAuthors.generated.json, so the page has them on load. Talks added
+ * Pre-build: looks up each paper in the reading-group repo on OpenAlex (its
+ * title as OpenAlex has it, and its authors) and saves them to
+ * app/talkAuthors.generated.json, so the page has them on load. Talks whose
+ * title and authors are both hand-written in TALK_NOTES are skipped. Talks added
  * after the build are still looked up live in the browser.
  *
  * Entries already in the file are kept, not looked up again; delete one to
@@ -19,7 +20,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
 import { GITHUB_USER, READING_GROUP, TALK_NOTES } from '../app/data.ts';
-import { lookupAuthors } from '../app/lib/openalex.ts';
+import { lookupPaper, type Paper } from '../app/lib/openalex.ts';
 import { TALK_PATH, titleFromFilename } from '../app/lib/talkFiles.ts';
 
 const OUT = new URL('../app/talkAuthors.generated.json', import.meta.url);
@@ -38,13 +39,16 @@ async function listTalkPdfs(): Promise<{ path: string; title: string }[]> {
 	});
 }
 
-async function readExisting(): Promise<Record<string, string>> {
+async function readExisting(): Promise<Record<string, unknown>> {
 	try {
 		return JSON.parse(await readFile(OUT, 'utf8'));
 	} catch {
 		return {};
 	}
 }
+
+/** Entries from before titles were stored are bare author strings; look those up again. */
+const isPaper = (v: unknown): v is Paper => typeof v === 'object' && v !== null && 'title' in v;
 
 async function main() {
 	const apiKey = process.env.OPENALEX_API_KEY || undefined;
@@ -58,22 +62,24 @@ async function main() {
 		return;
 	}
 
-	const out: Record<string, string> = {};
+	const out: Record<string, Paper> = {};
 	let added = 0;
 	for (const { path, title } of pdfs) {
-		if (TALK_NOTES[path]?.authors) continue; // hand-written wins
-		if (existing[path]) {
-			out[path] = existing[path];
+		const notes = TALK_NOTES[path];
+		if (notes?.title && notes.authors) continue; // hand-written wins
+		const kept = existing[path];
+		if (isPaper(kept)) {
+			out[path] = kept;
 			continue;
 		}
 		try {
-			const authors = await lookupAuthors(title, apiKey);
-			if (authors) {
-				out[path] = authors;
+			const paper = await lookupPaper(title, apiKey);
+			if (paper) {
+				out[path] = paper;
 				added++;
-				console.log(`fetch-authors: ${title} → ${authors}`);
+				console.log(`fetch-authors: ${title} → "${paper.title}", ${paper.authors ?? 'no authors'}`);
 			} else {
-				console.warn(`fetch-authors: no OpenAlex match for "${title}"; add authors to TALK_NOTES`);
+				console.warn(`fetch-authors: no OpenAlex match for "${title}"; add title and authors to TALK_NOTES`);
 			}
 		} catch (err) {
 			console.warn(`fetch-authors: lookup failed for "${title}" (${(err as Error).message}); will retry next build`);
@@ -85,7 +91,7 @@ async function main() {
 	if (json !== `${JSON.stringify(existing, null, '\t')}\n`) {
 		await writeFile(OUT, json);
 	}
-	console.log(`fetch-authors: ${Object.keys(sorted).length} talks with authors (${added} new)`);
+	console.log(`fetch-authors: ${Object.keys(sorted).length} papers found (${added} new)`);
 }
 
 await main();

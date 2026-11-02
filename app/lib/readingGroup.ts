@@ -1,21 +1,24 @@
 'use client';
 
 import { GITHUB_USER, READING_GROUP, TALK_NOTES } from '../data';
-import BUILT_AUTHORS from '../talkAuthors.generated.json';
+import BUILT_PAPERS from '../talkAuthors.generated.json';
 import { cached, fileAdder, ghJson, HOUR, useLoaded } from './github';
+import type { Paper } from './openalex';
 import { TALK_PATH, titleFromFilename } from './talkFiles';
 
 export type Talk = {
 	path: string;
 	date: string; // YYYY-MM-DD, from the folder name
-	title: string;
-	/** Full title from the filename, used to look up authors. */
-	paperTitle: string;
 	/**
-	 * From TALK_NOTES, else looked up at build time (talkAuthors.generated.json);
-	 * talks added since the last build are looked up live by `paperTitle`.
+	 * `title` and `authors` come from TALK_NOTES, else from OpenAlex at build
+	 * time (talkAuthors.generated.json). `lookedUp` is false for talks added
+	 * since the last build: the page looks those up live by `paperTitle`.
 	 */
+	title?: string;
 	authors?: string;
+	lookedUp: boolean;
+	/** Full title from the filename: the OpenAlex search, and the fallback title. */
+	paperTitle: string;
 	note?: string;
 	presenter: string;
 	mine: boolean;
@@ -55,12 +58,15 @@ async function loadTalks(): Promise<{ talks: Talk[]; total: number }> {
 		const person = await fileAdder(READING_GROUP, path).catch(() => null);
 		const notes = TALK_NOTES[path] ?? {};
 		const paperTitle = titleFromFilename(file);
+		const built = (BUILT_PAPERS as Record<string, Paper | string>)[path];
+		const paper = typeof built === 'object' ? built : undefined; // strings: pre-title builds
 		return {
 			path,
 			date,
-			title: notes.title ?? paperTitle,
+			title: notes.title ?? paper?.title,
+			authors: notes.authors ?? paper?.authors ?? undefined,
+			lookedUp: Boolean(paper) || Boolean(notes.title && notes.authors),
 			paperTitle,
-			authors: notes.authors ?? (BUILT_AUTHORS as Record<string, string>)[path],
 			note: notes.note,
 			presenter: person?.name ?? '—',
 			mine: person?.login === GITHUB_USER,

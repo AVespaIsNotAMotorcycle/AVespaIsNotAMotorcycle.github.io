@@ -1,5 +1,5 @@
 /**
- * Paper authors looked up by title on OpenAlex. No imports and no browser
+ * Paper titles and authors looked up by title on OpenAlex. No imports and no browser
  * APIs, so both the page and the build script (scripts/fetch-talk-authors.mts)
  * can use it.
  */
@@ -16,10 +16,14 @@ type Works = {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/** OpenAlex titles sometimes carry <i>, <sub>, … and stray whitespace. */
+function cleanTitle(s: string): string {
+	return s.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+}
+
 /** Lowercase letters and digits only, so "Chain-of-Thought" matches "Chain of Thought". */
 function squash(s: string): string {
-	return s
-		.replace(/<[^>]*>/g, '') // OpenAlex titles sometimes carry <i>, <sub>, …
+	return cleanTitle(s)
 		.normalize('NFKD')
 		.toLowerCase()
 		.replace(/[^a-z0-9]/g, '');
@@ -63,12 +67,19 @@ async function searchTitle(title: string, apiKey?: string): Promise<Response> {
 	}
 }
 
+export type Paper = {
+	/** The paper's title as OpenAlex has it (see lookupPaper). */
+	title: string;
+	/** Short author credit, e.g. "Wei et al., 2022"; null if OpenAlex lists none. */
+	authors: string | null;
+};
+
 /**
- * Short author credit for the paper with this title, or null when no paper
- * with a matching title is found. Throws on network or rate-limit errors.
+ * The paper with this title, or null when no paper with a matching title is
+ * found. Throws on network or rate-limit errors.
  * `apiKey` is for the build script only: a key in the page would be public.
  */
-export async function lookupAuthors(title: string, apiKey?: string): Promise<string | null> {
+export async function lookupPaper(title: string, apiKey?: string): Promise<Paper | null> {
 	const res = await searchTitle(title, apiKey);
 	if (!res.ok) throw new Error(`OpenAlex ${res.status} for ${title}`);
 	const { results = [] } = (await res.json()) as Works;
@@ -76,15 +87,25 @@ export async function lookupAuthors(title: string, apiKey?: string): Promise<str
 	// (filenames may be truncated, so allow a prefix). A paper often has
 	// several records (preprint, proceedings); the most-cited is canonical.
 	const want = squash(title);
-	const [paper] = results
+	const matches = results
 		.filter((w) => {
 			const got = squash(w.display_name ?? '');
 			return got.length > 0 && (got.startsWith(want) || want.startsWith(got));
 		})
 		.sort((a, b) => b.cited_by_count - a.cited_by_count);
+	const [paper] = matches;
 	if (!paper) return null;
-	return formatAuthors(
-		paper.authorships.map((a) => a.author.display_name),
-		paper.publication_year,
-	);
+	// Records disagree on capitalization ("Chain-Of-Thought" vs
+	// "Chain-of-Thought"), so keep our title when any record spells it
+	// exactly that way; otherwise (a truncated or oddly cased filename) take
+	// the canonical record's.
+	const ours = cleanTitle(title);
+	const agrees = matches.some((w) => cleanTitle(w.display_name ?? '') === ours);
+	return {
+		title: agrees ? ours : cleanTitle(paper.display_name ?? ''),
+		authors: formatAuthors(
+			paper.authorships.map((a) => a.author.display_name),
+			paper.publication_year,
+		),
+	};
 }
