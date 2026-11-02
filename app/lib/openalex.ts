@@ -1,6 +1,6 @@
 /**
  * Paper titles and authors looked up by title on OpenAlex. No imports and no browser
- * APIs, so both the page and the build script (scripts/fetch-talk-authors.mts)
+ * APIs, so both the page and the build script (scripts/fetch-talk-papers.mts)
  * can use it.
  */
 const OPENALEX_WORKS = 'https://api.openalex.org/works';

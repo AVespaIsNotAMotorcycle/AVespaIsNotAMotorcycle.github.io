@@ -7,7 +7,7 @@ set -eu
 
 PAPERS=app/talkPapers.generated.json
 
-npm run --silent fetch-authors
+npm run --silent fetch-papers
 
 if [ -n "$(git status --porcelain -- "$PAPERS")" ]; then
 	git add -- "$PAPERS"

@@ -20,7 +20,7 @@ The reading-group table lists the PDFs in the
 [reading-group](https://github.com/AVespaIsNotAMotorcycle/reading-group) repo,
 named `YYYY-MM-DD/<paper title>.pdf`. Each paper's title and authors are
 looked up on [OpenAlex](https://openalex.org) at build time
-(`npm run fetch-authors`, saved to `app/talkPapers.generated.json`); talks
+(`npm run fetch-papers`, saved to `app/talkPapers.generated.json`); talks
 added since the last build are looked up in the browser. To override a title
 or authors, or add a note, add the PDF's path to `TALK_NOTES`.
 

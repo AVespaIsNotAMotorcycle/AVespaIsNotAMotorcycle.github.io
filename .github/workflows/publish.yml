@@ -79,11 +79,11 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
-      # Bakes paper authors into the build (scripts/fetch-talk-authors.mts).
+      # Bakes paper titles and authors into the build (scripts/fetch-talk-papers.mts).
       # OPENALEX_API_KEY is an optional repo secret; without it, lookups use
       # OpenAlex's small keyless budget, which runners' shared IPs can exhaust.
-      - name: Fetch paper authors
-        run: npm run fetch-authors
+      - name: Fetch papers
+        run: npm run fetch-papers
         env:
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -15,7 +15,7 @@
  *   OPENALEX_API_KEY  own daily budget instead of the shared keyless one
  *   GITHUB_TOKEN      higher GitHub rate limit for listing the repo
  *
- * Run: npm run fetch-authors
+ * Run: npm run fetch-papers
  */
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -58,7 +58,7 @@ async function main() {
 	try {
 		pdfs = await listTalkPdfs();
 	} catch (err) {
-		console.warn(`fetch-authors: couldn't list ${READING_GROUP} (${(err as Error).message}); keeping existing authors`);
+		console.warn(`fetch-papers: couldn't list ${READING_GROUP} (${(err as Error).message}); keeping existing papers`);
 		return;
 	}
 
@@ -77,12 +77,12 @@ async function main() {
 			if (paper) {
 				out[path] = paper;
 				added++;
-				console.log(`fetch-authors: ${title} → "${paper.title}", ${paper.authors ?? 'no authors'}`);
+				console.log(`fetch-papers: ${title} → "${paper.title}", ${paper.authors ?? 'no authors'}`);
 			} else {
-				console.warn(`fetch-authors: no OpenAlex match for "${title}"; add title and authors to TALK_NOTES`);
+				console.warn(`fetch-papers: no OpenAlex match for "${title}"; add title and authors to TALK_NOTES`);
 			}
 		} catch (err) {
-			console.warn(`fetch-authors: lookup failed for "${title}" (${(err as Error).message}); will retry next build`);
+			console.warn(`fetch-papers: lookup failed for "${title}" (${(err as Error).message}); will retry next build`);
 		}
 	}
 
@@ -91,7 +91,7 @@ async function main() {
 	if (json !== `${JSON.stringify(existing, null, '\t')}\n`) {
 		await writeFile(OUT, json);
 	}
-	console.log(`fetch-authors: ${Object.keys(sorted).length} papers found (${added} new)`);
+	console.log(`fetch-papers: ${Object.keys(sorted).length} papers found (${added} new)`);
 }
 
 await main();
