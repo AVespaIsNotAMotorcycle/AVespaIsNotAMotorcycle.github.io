@@ -64,7 +64,7 @@ export default function Home() {
 			<section>
 				<div className="section-head">
 					<h2>## Reading group</h2>
-					<a href={READING_GROUP_URL} className="mono note-link">all talks + slides →</a>
+					<a href={READING_GROUP_URL} className="mono note-link">all slides →</a>
 				</div>
 				<p className="body">
 					Since August 2026, a few friends and I have met to present ML and CS papers
