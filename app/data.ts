@@ -50,7 +50,7 @@ export type TalkNotes = {
 export const TALK_NOTES: Record<string, TalkNotes> = {
 	'2026-10-19/An Image is Worth 16x16 Words_ Transformers for Image Recognition at Scale.pdf': {
 		title: 'An Image is Worth 16x16 Words',
-		authors: 'Dosovitskiy et al., 2020 · ViT',
+		authors: 'Dosovitskiy et al., 2020',
 	},
 	'2026-10-05/Adam_ A Method for Stochastic Optimization.pdf': {
 		note: 'implemented by hand in Dots and Circles',
@@ -61,7 +61,7 @@ export const TALK_NOTES: Record<string, TalkNotes> = {
 	},
 	'2026-11-02/Interpreting GPT_ The Logit Lens.pdf': {
 		title: 'Interpreting GPT: The Logit Lens',
-		authors: 'nostalgebraist',
+		authors: 'nostalgebraist, 2020',
 	},
 };
 
