@@ -97,15 +97,44 @@ export function useRepoInfo(names: string[]): Loaded<Record<string, RepoInfo>> {
 
 export type Person = { login: string | null; name: string };
 
-/** Who made the oldest commit touching `path` in `repo`, i.e. who added it. */
+type ApiCommitDetail = {
+	parents: { sha: string }[];
+	files?: { filename: string; status: string; previous_filename?: string }[];
+};
+
+/** Renames followed before giving up and crediting the last one found. */
+const MAX_RENAMES = 5;
+
+/**
+ * Who made the oldest commit touching `path` in `repo`, i.e. who added it.
+ * GitHub's path filter doesn't follow renames, so when that oldest commit
+ * renamed the file, this keeps looking from before the rename under the old name.
+ */
 export function fileAdder(repo: string, path: string): Promise<Person> {
 	// Who added a file never changes, so this is cached for a long time.
-	return cached(`gh-adder-v1:${repo}/${path}`, 30 * 24 * HOUR, async () => {
-		const query = new URLSearchParams({ path, per_page: '100' });
-		const { body } = await ghJson<ApiCommit[]>(
-			`/repos/${GITHUB_USER}/${repo}/commits?${query}`,
-		);
-		const oldest = body[body.length - 1];
+	return cached(`gh-adder-v2:${repo}/${path}`, 30 * 24 * HOUR, async () => {
+		let oldest: ApiCommit & { sha: string } | undefined;
+		let current = path;
+		let before: string | undefined;
+		for (let hop = 0; hop <= MAX_RENAMES; hop++) {
+			const query = new URLSearchParams({ path: current, per_page: '100' });
+			if (before) query.set('sha', before);
+			const { body } = await ghJson<(ApiCommit & { sha: string })[]>(
+				`/repos/${GITHUB_USER}/${repo}/commits?${query}`,
+			);
+			const found = body[body.length - 1];
+			if (!found) break; // nothing under the old name; keep the rename's commit
+			oldest = found;
+			if (hop === MAX_RENAMES) break;
+			const { body: detail } = await ghJson<ApiCommitDetail>(
+				`/repos/${GITHUB_USER}/${repo}/commits/${found.sha}`,
+			);
+			const file = detail.files?.find((f) => f.filename === current);
+			const parent = detail.parents[0]?.sha;
+			if (file?.status !== 'renamed' || !file.previous_filename || !parent) break;
+			current = file.previous_filename;
+			before = parent;
+		}
 		if (!oldest) throw new Error(`no commits for ${path}`);
 		const login = oldest.author?.login ?? null;
 		const gitName = oldest.commit.author?.name ?? 'unknown';
