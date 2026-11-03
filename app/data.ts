@@ -59,6 +59,10 @@ export const TALK_NOTES: Record<string, TalkNotes> = {
 		title: 'Chain-of-Thought Prompting Elicits Reasoning in LLMs',
 		note: 'background for my reasoning fine-tune',
 	},
+	'2026-11-02/Interpreting GPT_ The Logit Lens.pdf': {
+		title: 'Interpreting GPT: The Logit Lens',
+		authors: 'nostalgebraist',
+	},
 };
 
 export const EXPERIENCE: { when: string; what: string }[] = [
