@@ -49,7 +49,7 @@ async function listPdfs(): Promise<{ path: string; date: string; file: string }[
 }
 
 async function loadTalks(): Promise<{ talks: Talk[]; total: number }> {
-	const pdfs = await listPdfs();
+	const pdfs = (await listPdfs()).filter(({ path }) => !TALK_NOTES[path]?.hidden);
 	const newest = [...pdfs]
 		.sort((a, b) => b.date.localeCompare(a.date) || a.file.localeCompare(b.file))
 		.slice(0, MAX_TALKS);

@@ -40,6 +40,8 @@ export type TalkNotes = {
 	authors?: string;
 	/** Shown under the paper as "↳ …". */
 	note?: string;
+	/** Leaves the PDF off the page entirely (e.g. a script, not a paper). */
+	hidden?: boolean;
 };
 
 /**
@@ -62,6 +64,16 @@ export const TALK_NOTES: Record<string, TalkNotes> = {
 	'2026-11-02/Interpreting GPT_ The Logit Lens.pdf': {
 		title: 'Interpreting GPT: The Logit Lens',
 		authors: 'nostalgebraist, 2020',
+	},
+	'2026-10-05/Presentation 2 Script.pdf': {
+		hidden: true,
+	},
+	'2026-09-14/Survey of Major Load Balancing Algorithms in Distributed Systems.pdf': {
+		hidden: true,
+	},
+	'2026-10-05/Survey of Major Load Balancing Algorithms in Distributed Systems.pdf': {
+		title: 'Survey of Major Load Balancing Algorithms in Distributed Systems',
+		authors: 'Ivanisenko & Radivilova, 2015',
 	},
 };
 

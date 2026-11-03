@@ -66,6 +66,7 @@ async function main() {
 	let added = 0;
 	for (const { path, title } of pdfs) {
 		const notes = TALK_NOTES[path];
+		if (notes?.hidden) continue;
 		if (notes?.title && notes.authors) continue; // hand-written wins
 		const kept = existing[path];
 		if (isPaper(kept)) {

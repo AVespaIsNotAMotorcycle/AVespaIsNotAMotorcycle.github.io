@@ -17,7 +17,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Push with `npm run push`, not `git push`: it refreshes and commits
   `app/talkPapers.generated.json` first.
 - Reading-group talks are the PDFs in the separate `reading-group` repo
-  (`YYYY-MM-DD/<paper title>.pdf`). Override a talk's title, authors or note
+  (`YYYY-MM-DD/<paper title>.pdf`). Override a talk's title, authors or note (or hide it)
   in `TALK_NOTES` (`app/data.ts`); don't hand-edit the generated JSON
   (delete an entry to re-fetch it).
 - Site content (contact links, repos, experience, talk notes) lives in
