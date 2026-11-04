@@ -34,9 +34,8 @@ export default function Home() {
 				<div className="highlight">
 					<h3>Dots and Circles — Manchu OCR</h3>
 					<p>
-						Trained only on rendered fonts, it reads 73.9% of unseen handwritten words
-						exactly — on par with a published CRNN — and 62.3% of photographed print
-						(ManchuOCR: 33.3%). Runs ~135 words/s on one CPU core.
+						92.9% exact-word accuracy on unseen print words (ManchuOCR: 69.2%). With no handwritten words in the training data, it scores
+						85.5% on a handwritten set (LLaMA-3.2-11B: 87.4%). Runs ~90 words/s on one CPU core.
 					</p>
 					<div className="row-links">
 						<a href="https://dots-and-circles.sasha-m-ebersole.com/">Try it →</a>
