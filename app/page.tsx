@@ -55,8 +55,7 @@ export default function Home() {
 			<section>
 				<h2>## Next</h2>
 				<p className="body">
-					Fine-tuning Qwen 2.5 into a reasoning model, then comparing its internals
-					before and after with the logit and Jacobian lenses.
+					Completing BlueDot Impact courses and working through the ARENA curriculum.
 				</p>
 			</section>
 

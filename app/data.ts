@@ -59,7 +59,6 @@ export const TALK_NOTES: Record<string, TalkNotes> = {
 	},
 	'2026-09-14/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models-1.pdf': {
 		title: 'Chain-of-Thought Prompting Elicits Reasoning in LLMs',
-		note: 'background for my reasoning fine-tune',
 	},
 	'2026-11-02/Interpreting GPT_ The Logit Lens.pdf': {
 		title: 'Interpreting GPT: The Logit Lens',
