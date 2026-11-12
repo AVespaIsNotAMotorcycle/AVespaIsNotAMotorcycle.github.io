@@ -17,9 +17,8 @@ export default function Home() {
 				</div>
 				<h1>Sasha Madden Ebersole</h1>
 				<p className="lede">
-					Software engineer in Seattle. I build neural networks from scratch — my Manchu
-					OCR model is a NumPy transformer with hand-written backprop — and I&apos;m moving
-					into interpretability research.
+					Software engineer in Seattle. I am interested in machine learning,
+					mechanistic interpretability, and late imperial Chinese history.
 				</p>
 				<nav aria-label="Contact" className="links mono">
 					<a href={`mailto:${CONTACT.email}`}>email</a>
@@ -55,7 +54,7 @@ export default function Home() {
 			<section>
 				<h2>## Next</h2>
 				<p className="body">
-					Completing BlueDot Impact courses and working through the ARENA curriculum.
+					Working on Manchu OCR and the ARENA curriculum.
 				</p>
 			</section>
 
